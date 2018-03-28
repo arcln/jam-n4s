@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+import sys
+sys.path.insert(0, './python3/')
+from napi import *
+
+N4S = Napi()
+
+def update():
+    middle = N4S.getRayAt(15)
+    print(middle);
+
+    N4S.setThrust(1, refresh = True)
+    N4S.setDirection(1, refresh = True)
+
+if __name__ == '__main__':
+    N4S.start(update)
