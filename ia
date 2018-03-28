@@ -6,12 +6,31 @@ from napi import *
 
 N4S = Napi()
 
+def pad(nb):
+    if nb >= -.5 and nb <= .5:
+        return nb
+    elif nb < -.5:
+        return -.5;
+    else:
+        return .5;
+
+def get_direction(avg):
+    print(avg / 250., file=sys.stderr)
+    return pad(avg / 200.)
+
 def update():
-    middle = N4S.getRayAt(15)
-    print(middle);
+    rays = N4S.getRays()
+
+    left_avg = sum(rays[0:15]) / 16
+    right_avg = sum(rays[16:31]) / 16
+    coeff = 1.6
+
+    if left_avg > coeff * right_avg:
+        N4S.setDirection(get_direction(left_avg), refresh = True)
+    if right_avg > coeff * left_avg:
+        N4S.setDirection(-get_direction(right_avg), refresh = True)
 
     N4S.setThrust(1, refresh = True)
-    N4S.setDirection(1, refresh = True)
 
 if __name__ == '__main__':
     N4S.start(update)

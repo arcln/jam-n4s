@@ -32,6 +32,7 @@ class Napi():
 
     def getRayAt(self, index):
         """Return the ray at the given index. If the index is out of range, the first item of the array is returned"""
+        print (self.__rays)
         return self.__rays[index] if index >= 0 and index < len(self.__rays) else 0
 
     def getAverageRay(self):
@@ -102,7 +103,10 @@ class Napi():
         resp = self.__send(True).split(':')
         self.__status = (int(resp[0]), resp[1])
         if resp[1] == 'KO': return
-        self.__rays = list(map(float, resp[3:35]))
+        try:
+            self.__rays = list(map(float, resp[3:35]))
+        except (ValueError):
+            pass
 
     def __defaultUpdate(self):
         self.setThrust(1)
